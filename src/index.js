@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import './index.css';
+import './basic'
+import Basic from './basic';
 
 function Square(props) {
     return (
@@ -165,30 +168,29 @@ function Square(props) {
   // setInterval(tick, 1000);
 
   //===============================================
-  // class Toggle extends React.Component {
-  //   constructor(props) {
-  //     super(props);
-  //     this.state = {isToggleOn: true};
+  class Toggle extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {isToggleOn: true};
   
-  //     // cara binding seperti ini diperlukan untuk membuat `this` dapat berfungsi -
-  //     // pada callback binding
-  //    // this.handleClick = this.handleClick.bind(this);
-  //   }
-  //   handleClick() {
-  //     console.log(this)
-  //     this.setState(state => ({
-  //       isToggleOn: !state.isToggleOn
-  //     }));
-  //   }
+      // cara binding seperti ini diperlukan untuk membuat `this` dapat berfungsi -
+      // pada callback binding
+      this.handleClick = this.handleClick.bind(this);
+    }
+    handleClick() {
+      this.setState(state => ({
+        isToggleOn: !state.isToggleOn
+      }));
+    }
   
-  //   render() {
-  //     return (
-  //       <button onClick={(e) => this.handleClick(e)}>
-  //         {this.state.isToggleOn ? 'ON' : 'OFF'}
-  //       </button>
-  //     );
-  //   }
-  // }
+    render() {
+      return (
+        <button onClick={this.handleClick}>
+          {this.state.isToggleOn ? 'ON' : 'OFF'}
+        </button>
+      );
+    }
+  }
   
   // ReactDOM.render(
   //   <Toggle />,
@@ -196,68 +198,68 @@ function Square(props) {
   // );
 
   //====================================
-  // function UserGreeting(props) {
-  //   return <h1>Welcome back!</h1>;
-  // }
+  function UserGreeting(props) {
+    return <h1>Welcome back!</h1>;
+  }
   
-  // function GuestGreeting(props) {
-  //   return <h1>Please sign up.</h1>;
-  // }
+  function GuestGreeting(props) {
+    return <h1>Please sign up.</h1>;
+  }
 
-  // function Greeting(props) {
+  function Greeting(props) {
     
-  //   const isLoggedIn = props.isLoggedIn;
-  //   if (isLoggedIn) {
-  //     return <UserGreeting />;
-  //   }
-  //   return <GuestGreeting />;
-  // }
+    const isLoggedIn = props.isLoggedIn;
+    if (isLoggedIn) {
+      return <UserGreeting />;
+    }
+    return <GuestGreeting />;
+  }
 
-  // function LoginButton(props) {
-  //   return (
-  //     <button onClick={props.onClick}>
-  //       Login
-  //     </button>
-  //   );
-  // }
+  function LoginButton(props) {
+    return (
+      <button onClick={props.onClick}>
+        Login
+      </button>
+    );
+  }
   
-  // function LogoutButton(props) {
-  //   return (
-  //     <button onClick={props.onClick}>
-  //       Logout
-  //     </button>
-  //   );
-  // }
-  // class LoginControl extends React.Component {
-  //   constructor(props) {
-  //     super(props);
-  //     this.handleLoginClick = this.handleLoginClick.bind(this);
-  //     this.handleLogoutClick = this.handleLogoutClick.bind(this);
-  //     this.state = {isLoggedIn: false};
-  //   }
+  function LogoutButton(props) {
+    return (
+      <button onClick={props.onClick}>
+        Logout
+      </button>
+    );
+  }
+  class LoginControl extends React.Component {
+    constructor(props) {
+      super(props);
+      this.handleLoginClick = this.handleLoginClick.bind(this);
+      this.handleLogoutClick = this.handleLogoutClick.bind(this);
+      this.state = {isLoggedIn: false};
+    }
   
-  //   handleLoginClick() {
-  //     this.setState({isLoggedIn: true});
-  //   }
+    handleLoginClick() {
+      this.setState({isLoggedIn: true});
+    }
   
-  //   handleLogoutClick() {
-  //     this.setState({isLoggedIn: false});
-  //   }
+    handleLogoutClick() {
+      this.setState({isLoggedIn: false});
+    }
   
-  //   render() {
-  //     const isLoggedIn = this.state.isLoggedIn;
-  //     let button;
-  //     if (isLoggedIn) button = <LogoutButton onClick={this.handleLogoutClick} />;
-  //     else button = <LoginButton onClick={this.handleLoginClick} />;
+    render() {
+      const isLoggedIn = this.state.isLoggedIn;
+      let button;
+      if (isLoggedIn) button = <LogoutButton onClick={this.handleLogoutClick} />;
+      else button = <LoginButton onClick={this.handleLoginClick} />;
   
-  //     return (
-  //       <div>
-  //         <Greeting isLoggedIn={isLoggedIn} />
-  //         {button}
-  //       </div>
-  //     );
-  //   }
-  // }
+      return (
+        <div>
+          <Greeting isLoggedIn={isLoggedIn} />
+          {button}
+        </div>
+      );
+    }
+  }
   
   // ReactDOM.render(
   //   <LoginControl />,
@@ -279,12 +281,302 @@ function Square(props) {
     );
   }
   
-  const messages = [];
-  ReactDOM.render(
-    <Mailbox unreadMessages={messages} />,
-    document.getElementById('root')
+  // const messages = [];
+  // ReactDOM.render(
+  //   <Mailbox unreadMessages={messages} />,
+  //   document.getElementById('root')
+  // );
+
+  //========================
+  class Reservation extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        isGoing: true,
+        numberOfGuests: 2
+      };
+  
+      this.handleInputChange = this.handleInputChange.bind(this);
+    }
+  
+    handleInputChange(event) {
+      const target = event.target;
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+      const name = target.name;
+      
+      this.setState({
+        [name]: value
+      });
+    }
+  
+    render() {
+      return (
+        <form>
+          <label>
+            Is going:
+            <input
+              name="isGoing"
+              type="checkbox"
+              checked={this.state.isGoing}
+              onChange={this.handleInputChange} />
+          </label>
+          <br />
+          <label>
+            Number of guests:
+            <input
+              name="numberOfGuests"
+              type="number"
+              value={this.state.numberOfGuests}
+              onChange={this.handleInputChange} />
+          </label>
+        </form>
+      );
+    }
+  }
+
+  //========================
+  function FancyBorder(props) {
+    return (
+      <div className={'FancyBorder FancyBorder-' + props.color}>
+        {props.children}
+      </div>
+    );
+  }
+
+  function WelcomeDialog() {
+    return (
+      <FancyBorder color="blue">
+        <h1 className="Dialog-title">
+          Selamat Datang
+        </h1>
+        <p className="Dialog-message">
+          Terima kasih telah mengunjungi pesawat luar angkasa kami!
+        </p>
+      </FancyBorder>
+    );
+  }
+
+  function SplitPane(props) {
+    return (
+      <div className="SplitPane">
+        <div className="SplitPane-left">
+          {props.left}
+        </div>
+        <div className="SplitPane-right">
+          {props.right}
+        </div>
+      </div>
+    );
+  }
+
+  function App() {
+    return (
+      <SplitPane
+        left={
+          <h1>Contact</h1>
+        }
+        right={
+          <h1>Call</h1>
+        } />
+    );
+  }
+
+
+  class CustomTextInput extends React.Component {
+    constructor(props) {
+      super(props);
+      // Buat ref untuk menyimpan elemen DOM textInput
+      this.textInput = React.createRef();
+    }
+
+    focus() {
+      console.log("test")
+      // Fokuskan pada input teks secara eksplisit menggunakan API DOM mentah
+      // Catatan: kita mengakses “current” untuk mendapatkan simpul DOM
+      this.textInput.current.focus();
+    }
+
+    render() {
+    // Gunakan callback `ref` untuk menyimpan referensi ke elemen 
+    // DOM input teks dalam field instans (misalnya, this.textInput).
+      return (
+        <div>
+          <input
+          type="text"
+          ref={this.textInput}
+        />
+        <button onClick={() => {this.focus()}}>Test</button>
+        </div>
+      );
+    }
+  }
+
+
+  class OuterClickExample extends React.Component {
+    constructor(props) {
+      super(props);
+  
+      this.state = { isOpen: false };
+      this.toggleContainer = React.createRef();
+  
+      this.onClickHandler = this.onClickHandler.bind(this);
+      this.onClickOutsideHandler = this.onClickOutsideHandler.bind(this);
+    }
+  
+    componentDidMount() {
+      window.addEventListener('click', this.onClickOutsideHandler);
+    }
+  
+    componentWillUnmount() {
+      window.removeEventListener('click', this.onClickOutsideHandler);
+    }
+  
+    onClickHandler() {
+      this.setState(currentState => ({
+        isOpen: !currentState.isOpen
+      }));
+    }
+  
+    onClickOutsideHandler(event) {
+      console.log(event.target)
+      console.log(this.toggleContainer.current)
+      if (this.state.isOpen && !this.toggleContainer.current.contains(event.target)) {
+        this.setState({ isOpen: false });
+      }
+    }
+  
+    render() {
+      return (
+        <div ref={this.toggleContainer}>
+          <button onClick={this.onClickHandler}>Pilih salah satu opsi</button>
+          {this.state.isOpen ? (
+            <ul>
+              <li>Opsi 1</li>
+              <li>Opsi 2</li>
+              <li>Opsi 3</li>
+            </ul>
+          ) : ""}
+        </div>
+      );
+    }
+  }
+
+  class BlurExample extends React.Component {
+    constructor(props) {
+      super(props);
+  
+      this.state = { isOpen: false };
+      this.timeOutId = null;
+  
+      this.onClickHandler = this.onClickHandler.bind(this);
+      this.onBlurHandler = this.onBlurHandler.bind(this);
+      this.onFocusHandler = this.onFocusHandler.bind(this);
+    }
+  
+    onClickHandler() {
+      this.setState(currentState => ({
+        isOpen: !currentState.isOpen
+      }));
+    }
+  
+    // Kita menutup popover pada detik selanjutnya menggunakan setTimeout.
+    // Ini perlu, karena kita harus memeriksa terlebih dahulu 
+    // apakah ada anak lain dari elemen ini yang telah menerima 
+    // fokus saat event blur diluncurkan sebelum event fokus yang baru.
+    onBlurHandler() {
+      this.timeOutId = setTimeout(() => {
+        this.setState({
+          isOpen: false
+        });
+      });
+    }
+  
+    // Jika ada anak yang menerima fokus, jangan tutup popover.
+    onFocusHandler() {
+      clearTimeout(this.timeOutId);
+    }
+  
+    render() {
+      // React membantu kita dengan melakukan bubbling 
+      // pada event blur dan fokus ke elemen induk.
+      return (
+        <div onBlur={this.onBlurHandler}
+             onFocus={this.onFocusHandler}>
+          <button onClick={this.onClickHandler}
+                  aria-haspopup="true"
+                  aria-expanded={this.state.isOpen}>
+            Pilih salah satu opsi
+          </button>
+          {this.state.isOpen && (
+            <ul>
+              <li>Opsi 1</li>
+              <li>Opsi 2</li>
+              <li>Opsi 3</li>
+            </ul>
+          )}
+        </div>
+      );
+    }
+  }
+
+
+  const Home = lazy(() => import('./home'));
+  const About = lazy(() => import('./about'));
+
+  const AppRouter = () => (
+    <Router>
+      <Suspense fallback={<div>Sedang memuat...</div>}>
+        <Routes>
+          <Route exact path="/" element={<Home/>}/>
+          <Route path="/about" element={<About/>}/>
+        </Routes>
+      </Suspense>
+    </Router>
   );
 
+// Context memungkinkan kita untuk oper nilai ke dalam diagram komponen
+// tanpa secara ekplisit memasukannya ke dalam setiap komponen.
+// Buat *context* untuk tema saat ini (dengan "light" sebagai default).
+const ThemeContext = React.createContext('light');
 
+class AppContext extends React.Component {
 
-  
+static contextType = ThemeContext;
+
+  render() {
+    console.log(this.context)
+    // Gunakan Provider untuk oper tema saat ini ke diagram di bawah ini.
+    // Komponen apa pun dapat membacanya, tidak peduli seberapa dalam diagram tersebut.
+    // Dalam contoh ini, kita mengoper "dark" sebagai nilai saat ini.
+    return (
+      <ThemeContext.Provider value="dark">
+        <Toolbar />
+      </ThemeContext.Provider>
+    );
+  }
+}
+
+//AppContext.contextType = ThemeContext;
+
+// Komponen di tengah tidak harus 
+// oper temanya secara ekplisit lagi.
+function Toolbar() {
+  return (
+    <div>
+      <ThemedButton />
+    </div>
+  );
+}
+
+class ThemedButton extends React.Component {
+  // Tetapkan contextType untuk membaca *context theme* saat ini.
+  // React akan menemukan Provider *theme* terdekat di atas dan menggunakan nilainya.
+  // Dalam contoh ini, *theme* saat ini adalah "dark".
+  static contextType = ThemeContext;
+  render() {
+    console.log(this.context)
+    return <button />;
+  }
+}
+
+  ReactDOM.render(<AppContext/>, document.getElementById('root'))

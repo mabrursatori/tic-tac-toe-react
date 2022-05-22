@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import './index.css';
@@ -579,4 +579,26 @@ class ThemedButton extends React.Component {
   }
 }
 
-  ReactDOM.render(<AppContext/>, document.getElementById('root'))
+function Example() {
+  const [count, setCount] = useState(0);
+
+  // Sama seperti componentDidMount dan componentDidUpdate:
+  useEffect(() => {
+    // Memperbarui judul dokumen menggunakan API browser
+    console.log("TEST");
+    document.title = `Anda klik sebanyak ${count} kali`;
+  });
+
+  return (
+    <div>
+      <p>Anda klik sebanyak {count} kali</p>
+      <button onClick={() => setCount(count + 1)}>
+        Klik saya
+      </button>
+    </div>
+  );
+}
+
+
+
+  ReactDOM.render(<Example/>, document.getElementById('root'))

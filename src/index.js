@@ -579,7 +579,7 @@ class ThemedButton extends React.Component {
   }
 }
 
-function Example() {
+function ExampleHook() {
   const [count, setCount] = useState(0);
 
   // Sama seperti componentDidMount dan componentDidUpdate:
@@ -599,6 +599,39 @@ function Example() {
   );
 }
 
+var createReactClass = require('create-react-class');
+var GreetingES6 = createReactClass({
+  render: function() {
+    return <h1>Halo {this.props.name}</h1>;
+  }
+});
 
+class FriendStatus extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { isOnline: null };
+    this.handleStatusChange = this.handleStatusChange.bind(this);
+  }
 
-  ReactDOM.render(<Example/>, document.getElementById('root'))
+  componentDidMount() {
+    console.log("MOUNT")
+  }
+  componentWillUnmount() {
+    console.log("UNMOUNT")
+  }
+  handleStatusChange(status) {
+    this.setState({
+      isOnline: status.isOnline
+    });
+  }
+
+  render() {
+    if (this.state.isOnline === null) {
+      return 'Loading...';
+    }
+    return this.state.isOnline ? 'Online' : 'Offline';
+  }
+}
+
+  ReactDOM.render(<FriendStatus/>, document.getElementById('root'))
+  ReactDOM.render(<GreetingES6/>, document.getElementById('root'))

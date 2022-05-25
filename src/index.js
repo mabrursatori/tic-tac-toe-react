@@ -633,5 +633,25 @@ class FriendStatus extends React.Component {
   }
 }
 
-  ReactDOM.render(<FriendStatus/>, document.getElementById('root'))
-  ReactDOM.render(<GreetingES6/>, document.getElementById('root'))
+function Form() {
+  // 1. Menggunakan state variabel name
+  const [name, setName] = useState('Mary');
+
+  // 2. Menggunakan sebuah effect untuk mengukuhkan form
+  useEffect(function persistForm() {
+    console.log("PERSIST FORM")
+    localStorage.setItem('formData', name);
+  });
+
+  // 3. Menggunakan state variabel surname
+  const [surname, setSurname] = useState('Poppins');
+
+  // 4. Menggunakan sebuah effect untuk meng-update title
+  useEffect(function updateTitle() {
+    console.log("UPDATE TITLE")
+    document.title = name + ' ' + surname;
+  });
+
+  return <button onClick={() => setName(name + 1)}>Klik!</button>
+}
+  ReactDOM.render(<Form/>, document.getElementById('root'))
